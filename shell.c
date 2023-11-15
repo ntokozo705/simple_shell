@@ -39,6 +39,7 @@ int main(void)
 	char *token;
 	char *args[MAX_ARGS];
 	int argCount = 0;
+	pid_t pid;
 
 	while (1)
 	{
@@ -57,7 +58,7 @@ int main(void)
 			token = strtok(NULL, " ");
 		}
 		args[argCount] = NULL;
-		pid_t pid = fork();
+		pid = fork();
 
 		if (pid == -1)
 		{
