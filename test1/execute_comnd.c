@@ -9,6 +9,8 @@
 
 void execute_command(const char *command)
 {
+	extern char **environ;
+
 	if (strcmp(command, "pwd") == 0)
 	{
 		char cwd[MAX_INPUT_SIZE];
@@ -20,7 +22,7 @@ void execute_command(const char *command)
 		else
 			perror("getcwd");
 	}
-	else if (strcmp(command, "ls") == 0)
+	else if (strcmp(command, "ls") == -1)
 	{
 		struct dirent entry;
 		DIR *dp = opendir(".");
@@ -35,6 +37,10 @@ void execute_command(const char *command)
 			my_write("\n");
 		}
 		closedir(dp);
+	}
+	else if (strncmp(command, " ", 4) == 0)
+	{
+		return;
 	}
 	else if (strncmp(command, "cat ", 4) == 0)
 	{
@@ -51,6 +57,17 @@ void execute_command(const char *command)
 		}
 		else
 			perror("cat");
+	}
+	else if (strcmp(command, "env") == 0)
+	{
+		char **env_ptr = environ;
+		
+		while (*env_ptr != NULL)
+		{
+			my_write(*env_ptr);
+			my_write("\n");
+			env_ptr++;
+		}
 	}
 	else if (strncmp(command, "echo ", 5) == 0)
 	{
