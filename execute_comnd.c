@@ -22,17 +22,20 @@ void execute_command(const char *command)
 	}
 	else if (strcmp(command, "ls") == 0)
 	{
-		struct dirent entry;
 		DIR *dp = opendir(".");
+		struct dirent entry;
 		if (dp == NULL)
 		{
 			perror("opendir");
 			return;
 		}
-		while ((readdir(dp)) != NULL)
+		while (readdir(dp) != NULL)
 		{
-			my_write(entry.d_name);
-			my_write("\n");
+			if (entry.d_name != NULL)
+			{
+				my_write(entry.d_name);
+				my_write("\n");
+			}
 		}
 		closedir(dp);
 	}
@@ -70,7 +73,19 @@ void execute_command(const char *command)
 		}
 		else if (child_pid == 0)
 		{
-			execlp(command, command, NULL);
+			char *args[MAX_INPUT_SIZE];
+			char *token;
+
+			int i = 0;
+
+			token = strtok((char *)command, " ");
+			while (token != NULL)
+			{
+				args[i++] = token;
+				token = strtok(NULL, " ");
+			}
+			args[i] = NULL;
+			execvp(args[0], args);
 			perror("exec");
 			exit(1);
 		}
