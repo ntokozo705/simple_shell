@@ -13,7 +13,7 @@ int main(void)
 
 	while (1)
 	{
-		my_write("S_shell$ ");
+		my_write("#cisfun$ ");
 		if (fgets(input, MAX_INPUT_SIZE, stdin) == NULL)
 		{
 			my_write("\n");
