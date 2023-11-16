@@ -9,6 +9,8 @@
 void execute_command(const char *command)
 {
 	pid_t child_pid;
+	char *args[MAX_INPUT_SIZE];
+	int arg_count;
 
 	if (command == NULL)
 	{
@@ -20,6 +22,9 @@ void execute_command(const char *command)
 	{
 		return;
 	}
+	arg_count = 0;
+
+	tokenize_cmd(command, args, &arg_count);
 
 	child_pid = fork();
 
@@ -30,11 +35,6 @@ void execute_command(const char *command)
 	}
 	else if (child_pid == 0)
 	{
-		char *args[2];
-
-		args[0] = (char *)command;
-		args[1] = NULL;
-
 		execvp(args[0], args);
 		perror("exec");
 		exit(EXIT_FAILURE);
