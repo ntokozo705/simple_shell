@@ -13,7 +13,6 @@
 
 void execute_command(const char *command);
 void my_write(const char *message);
-extern int execvp (const char *__file, char *const __argv[]);
-
-
-#endif 
+extern int execvp(const char *__file, char *const __argv[]);
+void tokenize_cmd(const char *command_line, char **args, int *arg_count);
+#endif

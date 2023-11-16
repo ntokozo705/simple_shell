@@ -6,94 +6,43 @@
  *
  * Return: void.
  */
-
 void execute_command(const char *command)
 {
-	if (strcmp(command, "pwd") == 0)
-	{
-		char cwd[MAX_INPUT_SIZE];
-		if (getcwd(cwd, sizeof(cwd)) != NULL)
-		{
-			my_write(cwd);
-			my_write("\n");
-		}
-		else
-			perror("getcwd");
-	}
-	else if (strcmp(command, "ls") == 0)
-	{
-		DIR *dp = opendir(".");
-		struct dirent entry;
-		if (dp == NULL)
-		{
-			perror("opendir");
-			return;
-		}
-		while (readdir(dp) != NULL)
-		{
-			if (entry.d_name != NULL)
-			{
-				my_write(entry.d_name);
-				my_write("\n");
-			}
-		}
-		closedir(dp);
-	}
-	else if (strncmp(command, "cat ", 4) == 0)
-	{
-		const char *file_name = command + 4;
-		FILE *file = fopen(file_name, "r");
-		if (file != NULL)
-		{
-			char line[MAX_INPUT_SIZE];
-			while (fgets(line, sizeof(line), file))
-			{
-				my_write(line);
-			}
-			fclose(file);
-		}
-		else
-			perror("cat");
-	}
-	else if (strncmp(command, "echo ", 5) == 0)
-	{
-		const char *message = command + 5;
+	pid_t child_pid;
+	char *args[MAX_INPUT_SIZE];
+	int arg_count;
 
-		my_write(message);
-		my_write("\n");
+	if (command == NULL)
+	{
+		perror("Error reading command");
+		exit(EXIT_FAILURE);
+	}
+
+	if (strlen(command) == 0)
+	{
+		return;
+	}
+	arg_count = 0;
+
+	tokenize_cmd(command, args, &arg_count);
+
+	child_pid = fork();
+
+	if (child_pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	else if (child_pid == 0)
+	{
+		execvp(args[0], args);
+		perror("exec");
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
-		pid_t child_pid = fork();
+		int status;
 
-		if (child_pid == -1)
-		{
-			perror("fork");
-			return;
-		}
-		else if (child_pid == 0)
-		{
-			char *args[MAX_INPUT_SIZE];
-			char *token;
-
-			int i = 0;
-
-			token = strtok((char *)command, " ");
-			while (token != NULL)
-			{
-				args[i++] = token;
-				token = strtok(NULL, " ");
-			}
-			args[i] = NULL;
-			execvp(args[0], args);
-			perror("exec");
-			exit(1);
-		}
-		else 
-		{
-			int status;
-			
-			waitpid(child_pid, &status, 0);
-		}
+		waitpid(child_pid, &status, 0);
 	}
 }
