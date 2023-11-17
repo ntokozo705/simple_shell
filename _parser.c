@@ -64,7 +64,7 @@ char *find_path(info_t *info, char *str, char *cmd)
 		if (is_cmd(info, cmd))
 			return (cmd);
 	}
-	while (i)
+	while (1)
 	{
 		if (!str[i] || str[i] == ':')
 		{

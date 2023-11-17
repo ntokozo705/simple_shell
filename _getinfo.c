@@ -24,7 +24,7 @@ void set_info(info_t *info, char **add)
 	int i = 0;
 
 	info->fname = add[0];
-	if (inf->arg)
+	if (info->arg)
 	{
 		info->argv = strtow(info->arg, " \t");
 		if (!info->argv)
@@ -40,8 +40,7 @@ void set_info(info_t *info, char **add)
 			;
 		info->argc = i;
 
-		replace_alias(info);
+		r_alias(info);
 		r_vars(info);
 	}
 }
-

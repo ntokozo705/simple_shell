@@ -18,11 +18,11 @@ ssize_t input_buff(info_t *info, char **buff, size_t *len)
 	{
 		free(*buff);
 		*buff = NULL;
-		signal(SIGINT, signintHandler);
+		signal(SIGINT, sigintHandler);
 #if USE_GETLINE
-		r = getline(buff, &len_p, stdin);
+		r = get_line(buff, &len_p, stdin);
 #else
-		r = _getline(info, buff, &len_p);
+		r = get_line(info, buff, &len_p);
 #endif
 		if (r > 0)
 		{
@@ -78,14 +78,15 @@ ssize_t get_input(info_t *info)
 		if (i >= len)
 		{
 			i = len = 0;
-			info->cmd_buf_type = CMD_NORM;
+			info->cmd_buffer_type = CMD_NORM;
 		}
-		*buf_p = p;
+		*buff_p = p;
 		return (strlen(p));
 	}
-	*buf_p = buf;
+	*buff_p = buff;
 	return (r);
 }
+
 /**
  * getline - Gets next line arg
  * @info: struct para
@@ -95,7 +96,7 @@ ssize_t get_input(info_t *info)
  * Return: s
  */
 
-int getline(info_t *info, char **ptr, size_t *length)
+int get_line(info_t *info, char **ptr, size_t *length)
 {
 	static char buff[READ_BUF_SIZE];
 	static size_t i, len;
@@ -109,20 +110,20 @@ int getline(info_t *info, char **ptr, size_t *length)
 	if (i == len)
 		i = len = 0;
 
-	r = read_buf(info, buf, &len);
+	r = read_buf(info, buff, &len);
 	if (r == -1 || (r == 0 && len == 0))
 		return (-1);
 
-	c = _strchr(buf + i, '\n');
-	k = c ? 1 + (unsigned int)(c - buf) : len;
+	c = strchr(buff + i, '\n');
+	k = c ? 1 + (unsigned int)(c - buff) : len;
 	new_p = _realloc(p, s, s ? s + k : k + 1);
 	if (!new_p) /* MALLOC FAILURE! */
 		return (p ? free(p), -1 : -1);
 
 	if (s)
-		_strncat(new_p, buf + i, k - i);
+		strncat(new_p, buff + i, k - i);
 	else
-		_strncpy(new_p, buf + i, k - i + 1);
+		strncpy(new_p, buff + i, k - i + 1);
 
 	s += k - i;
 	i = k;
@@ -146,5 +147,3 @@ void sigintHandler(__attribute__((unused))int sig_num)
 	puts("$ ");
 	putchar(BUF_FLUSH);
 }
-
-

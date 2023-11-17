@@ -7,11 +7,11 @@
  * Return: allocated string history file.
  */
 
-char *get_history(info_t *info)
+char *get_hist(info_t *info)
 {
 	char *buffer, *dir;
 
-	dir = getenv(info, "home=");
+	dir = get_env(info, "home=");
 	if (!dir)
 		return (NULL);
 	buffer = malloc(sizeof(char) * (strlen(dir) + strlen(HIST_FILE) + 2));
@@ -43,12 +43,12 @@ int write_hist(info_t *info)
 	free(filename);
 	if (fd == -1)
 		return (-1);
-	for (node = info->hstory; node; node = node->next)
+	for (node = info->history; node; node = node->next)
 	{
-		puts(node->str, fd);
-		puts('\n', fd);
+		_putsfd(node->str, fd);
+		_putfd('\n', fd);
 	}
-	puts(BUF_FLUSH, fd);
+	_putfd(BUF_FLUSH, fd);
 	close(fd);
 	return (1);
 }
@@ -63,7 +63,7 @@ int read_hist(info_t *info)
 	int i, last = 0, linecount = 0;
 	ssize_t fd, rdlen, fsize = 0;
 	struct stat st;
-	char *buffer = NULL, *filename = get_hist(infor);
+	char *buffer = NULL, *filename = get_hist(info);
 
 	if (!filename)
 		return (0);
@@ -76,7 +76,7 @@ int read_hist(info_t *info)
 	if (fsize < 2)
 		return (0);
 	buffer = malloc(sizeof(char) * (fsize + 1));
-	if (!buffr)
+	if (!buffer)
 		return (0);
 	rdlen = read(fd, buffer, fsize);
 	buffer[fsize] = 0;
@@ -95,7 +95,7 @@ int read_hist(info_t *info)
 	free(buffer);
 	info->histcount = linecount;
 	while (info->histcount-- >= HIST_MAX)
-		delete_node_at_index(&(info->history), 0);
+		delete_nodeindex(&(info->history), 0);
 	number_hist(info);
 	return (info->histcount);
 }
@@ -127,7 +127,7 @@ int build_hist(info_t *info, char *buffer, int linecount)
  * Return: new history count.
  */
 
-int number_hist(infor_t *info)
+int number_hist(info_t *info)
 {
 	list_t *node = info->history;
 	int i = 0;

@@ -84,11 +84,11 @@ list_t end_node(list_t **head, const char *str, int num)
 
 size_t print_list(const list_t *dd)
 {
-	size_t = 0;
+	size_t i = 0;
 
-	while (h)
+	while (dd)
 	{
-		put(hh->str ? dd->str : "(nil)");
+		puts(dd->str ? dd->str : "(nil)");
 		puts("\n");
 		dd = dd->next;
 		i++;
@@ -147,7 +147,7 @@ void free_list(list_t **headptr)
 
 	if (!headptr || !*headptr)
 		return;
-	head = *head_ptr;
+	head = *headptr;
 	node = head;
 	while (node)
 	{

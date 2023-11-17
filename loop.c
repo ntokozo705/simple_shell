@@ -56,7 +56,7 @@ int find_builtin(info_t *info)
 	builtin_table builtin_t[] = {
 		{"exit", myexit},
 		{"help", myhelp},
-		{"history", myhistory},
+		{"history", my_hist},
 		{"setenv", mysetenv},
 		{"unsetenv", myunsetenv},
 		{"cd", mycd},
@@ -89,14 +89,14 @@ void find_cmd(info_t *info)
 	if (info->line_count == 1)
 	{
 		info->line_count++;
-		info->line_count = 0;
+		info->linecount_flag = 0;
 	}
 	for (i = 0, k = 0; info->arg[i]; i++)
 		if (!is_delim(info->arg[i], " \t\n"))
 			k++;
 	if (!k)
 		return;
-	path = find_path(info, getenv(info, "PATH="), info->argv[0]);
+	path = find_path(info, get_env(info, "PATH="), info->argv[0]);
 	if (path)
 	{
 		info->path = path;
@@ -104,7 +104,7 @@ void find_cmd(info_t *info)
 	}
 	else
 	{
-		if ((interactive(info) || getenv(info, "PATH=")
+		if ((interactive(info) || get_env(info, "PATH=")
 					|| info->argv[0][0] == '/')
 				&& is_cmd(info, info->argv[0]))
 			fork_cmd(info);
@@ -134,7 +134,7 @@ void fork_cmd(info_t *inf)
 	}
 	if (child_pid == 0)
 	{
-		if (execve(info->path, info->argv, get_env(inf)) == -1)
+		if (execve(inf->path, inf->argv, get_env(inf)) == -1)
 		{
 			free_info(inf, 1);
 			if (errno == EACCES)
@@ -153,6 +153,3 @@ void fork_cmd(info_t *inf)
 		}
 	}
 }
-
-
-

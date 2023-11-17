@@ -2,11 +2,13 @@
 #define MAIN_H
 
 #include <stdio.h>
+#include <sys/stat.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <dirent.h>
+#include <sys/types.h>
 #include <limits.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -157,30 +159,30 @@ int print_d(int, int);
 char *convert_number(long int, int, int);
 void remove_comments(char *);
 
-int _myexit(info_t *);
-int _mycd(info_t *);
-int _myhelp(info_t *);
+int myexit(info_t *);
+int mycd(info_t *);
+int myhelp(info_t *);
 
-int _myhistory(info_t *);
-int _myalias(info_t *);
+int my_hist(info_t *);
+int myalias(info_t *);
 
 ssize_t get_input(info_t *);
-int _getline(info_t *, char **, size_t *);
+int get_line(info_t *, char **, size_t *);
 void sigintHandler(int);
 
 void clear_info(info_t *);
 void set_info(info_t *, char **);
 void free_info(info_t *, int);
 
-char *_getenv(info_t *, const char *);
-int _myenv(info_t *);
-int _mysetenv(info_t *);
-int _myunsetenv(info_t *);
+char *get_env(info_t *, const char *);
+int myenv(info_t *);
+int mysetenv(info_t *);
+int myunsetenv(info_t *);
 int populate_env_list(info_t *);
 
 char **get_environ(info_t *);
-int _unsetenv(info_t *, char *);
-int _setenv(info_t *, char *, char *);
+/*int unsetenv(info_t *, char *, char *);
+//int setenv(info_t *, char *, char *);*/
 
 char *get_hist(info_t *info);
 int write_hist(info_t *info);
