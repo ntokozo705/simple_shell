@@ -41,11 +41,11 @@ int chain(info_t *info, char *buffer, size_t *p)
  * Return: Void
  */
 
-void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
+void check_chain(info_t *info, char *buffer, size_t *p, size_t i, size_t len)
 {
 	size_t j = *p;
 
-	if (info->cmd_buf_type == CMD_AND)
+	if (info->cmd_buffer_type == CMD_AND)
 	{
 		if (info->status)
 		{
@@ -101,12 +101,12 @@ int r_vars(info_t *info)
 	{
 		if (info->argv[i][0] != '$' || !info->argv[i][1])
 			continue;
-		if (!_strcmp(info->argv[i], "$?"))
+		if (!strcmp(info->argv[i], "$?"))
 		{
-			replace_string(&(info->argv[i]), _strdup(_strchr(node->str, '=') + 1));
+			replace_string(&(info->argv[i]), strdup(strchr(node->str, '=') + 1));
 			continue;
 		}
-		replace_string(&info->argv[i], _strdup(""));
+		replace_string(&info->argv[i], strdup(""));
 	}
 	return (0);
 }
