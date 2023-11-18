@@ -115,6 +115,7 @@ int hsh(info_t *, char **);
 int find_builtin(info_t *);
 void find_cmd(info_t *);
 void fork_cmd(info_t *);
+int interactive(info_t *info);
 
 int is_cmd(info_t *, char *);
 char *dupl_chars(char *, int, int);
@@ -142,22 +143,22 @@ char *_strncat(char *, char *, int);
 char *_strchr(char *, char);
 
 char **strtow(char *, char *);
-char **strtow2(char *, char);
+char **strtow1(char *, char);
 
 char *_memset(char *, char, unsigned int);
 void ffree(char **);
 void *_realloc(void *, unsigned int, unsigned int);
 
-int bfree(void **);
+int b_free(void **);
 int is_delim(char, char *);
 int _isalpha(int);
 int _atoi(char *);
 
-int _erratoi(char *);
-void print_error(info_t *, char *);
+int _errtoi(char *);
+void print_err(info_t *, char *);
 int print_d(int, int);
-char *convert_number(long int, int, int);
-void remove_comments(char *);
+char *convert_numb(long int, int, int);
+void remove_comm(char *);
 
 int myexit(info_t *);
 int mycd(info_t *);
@@ -169,6 +170,7 @@ int myalias(info_t *);
 ssize_t get_input(info_t *);
 int get_line(info_t *, char **, size_t *);
 void sigintHandler(int);
+int read_buff(info_t *info, char *buff, size_t *len);
 
 void clear_info(info_t *);
 void set_info(info_t *, char **);
@@ -207,6 +209,7 @@ void check_chain(info_t *, char *, size_t *, size_t, size_t);
 int r_alias(info_t *);
 int r_vars(info_t *);
 int replace_string(char **, char *);
+list_t *end_node(list_t **, const char *, int);
 
 #define MAX_INPUT_SIZE 1024
 

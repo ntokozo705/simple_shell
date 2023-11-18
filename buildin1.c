@@ -31,8 +31,8 @@ int unset_aliass(info_t *info, char *str)
 		return (1);
 	c = *p;
 	*p = 0;
-	ret = delete_nodeindex(&(info->aliass),
-			get_nodeindex(info->aliass, node_starts_with(info->aliass, str, -1)));
+	ret = delete_nodeindex(&(info->alias),
+			get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
 	*p = c;
 	return (ret);
 }
@@ -55,7 +55,7 @@ int set_aliass(info_t *info, char *str)
 	if (!*++p)
 		return (unset_aliass(info, str));
 	unset_aliass(info, str);
-	return (end_node(&(info->aliass), str, 0) == NULL);
+	return (end_node(&(info->alias), str, 0) == NULL);
 }
 
 /**
@@ -114,4 +114,3 @@ int myalias(info_t *info)
 	}
 	return (0);
 }
-

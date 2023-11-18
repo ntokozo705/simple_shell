@@ -20,7 +20,7 @@ ssize_t input_buff(info_t *info, char **buff, size_t *len)
 		*buff = NULL;
 		signal(SIGINT, sigintHandler);
 #if USE_GETLINE
-		r = get_line(buff, &len_p, stdin);
+		r = getline(buff, &len_p, stdin);
 #else
 		r = get_line(info, buff, &len_p);
 #endif
@@ -28,18 +28,15 @@ ssize_t input_buff(info_t *info, char **buff, size_t *len)
 		{
 			if ((*buff)[r - 1] == '\n')
 			{
-				((*buff)[r - 1] == '\n')
-				{
-					(*buff)[r - 1] = '\0';
-					r--;
-				}
-				info->linecount_flag = 1;
-				remove_comments(*buff);
-				build_hist(info, *buff, info->histcount++);
-				{
-					*len = r;
-					info->cmd_buf = buff;
-				}
+				(*buff)[r - 1] = '\0';
+				r--;
+			}
+			info->linecount_flag = 1;
+			remove_comm(*buff);
+			build_hist(info, *buff, info->histcount++);
+			{
+				*len = r;
+				info->cmd_buf = buff;
 			}
 		}
 	}
@@ -110,20 +107,20 @@ int get_line(info_t *info, char **ptr, size_t *length)
 	if (i == len)
 		i = len = 0;
 
-	r = read_buf(info, buff, &len);
+	r = read_buff(info, buff, &len);
 	if (r == -1 || (r == 0 && len == 0))
 		return (-1);
 
-	c = strchr(buff + i, '\n');
+	c = _strchr(buff + i, '\n');
 	k = c ? 1 + (unsigned int)(c - buff) : len;
 	new_p = _realloc(p, s, s ? s + k : k + 1);
 	if (!new_p) /* MALLOC FAILURE! */
 		return (p ? free(p), -1 : -1);
 
 	if (s)
-		strncat(new_p, buff + i, k - i);
+		_strncat(new_p, buff + i, k - i);
 	else
-		strncpy(new_p, buff + i, k - i + 1);
+		_strncpy(new_p, buff + i, k - i + 1);
 
 	s += k - i;
 	i = k;
@@ -143,7 +140,7 @@ int get_line(info_t *info, char **ptr, size_t *length)
 
 void sigintHandler(__attribute__((unused))int sig_num)
 {
-	puts("\n");
-	puts("$ ");
-	putchar(BUF_FLUSH);
+	_puts("\n");
+	_puts("$ ");
+	_putchar(BUF_FLUSH);
 }

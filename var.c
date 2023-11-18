@@ -103,7 +103,7 @@ int r_vars(info_t *info)
 			continue;
 		if (!strcmp(info->argv[i], "$?"))
 		{
-			replace_string(&(info->argv[i]), strdup(strchr(node->str, '=') + 1));
+			replace_string(&(info->argv[i]), _strdup(_strchr(node->str, '=') + 1));
 			continue;
 		}
 		replace_string(&info->argv[i], strdup(""));

@@ -96,7 +96,7 @@ void find_cmd(info_t *info)
 			k++;
 	if (!k)
 		return;
-	path = find_path(info, get_env(info, "PATH="), info->argv[0]);
+	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
 	if (path)
 	{
 		info->path = path;
@@ -111,7 +111,7 @@ void find_cmd(info_t *info)
 		else if (*(info->arg) != '\n')
 		{
 			info->status = 127;
-			print_error(info, "not found\n");
+			print_err(info, "not found\n");
 		}
 	}
 }
@@ -149,7 +149,7 @@ void fork_cmd(info_t *inf)
 		{
 			inf->status = WEXITSTATUS(inf->status);
 			if (inf->status == 126)
-				print_error(inf, "Permission denied\n");
+				print_err(inf, "Permission denied\n");
 		}
 	}
 }
