@@ -1,8 +1,8 @@
 #include "main.h"
 
 /**
- * my_write - The print function
- * @message: message
+ * myprintf - The print function
+ *
  * Return: void.
  */
 

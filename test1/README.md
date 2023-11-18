@@ -1,1 +1,0 @@
-ntokozo test dir

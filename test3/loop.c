@@ -96,7 +96,7 @@ void find_cmd(info_t *info)
 			k++;
 	if (!k)
 		return;
-	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
+	path = find_path(info, get_env(info, "PATH="), info->argv[0]);
 	if (path)
 	{
 		info->path = path;
@@ -134,7 +134,7 @@ void fork_cmd(info_t *inf)
 	}
 	if (child_pid == 0)
 	{
-		if (execve(inf->path, inf->argv, get_env(inf)) == -1)
+		if (execve(inf->path, inf->argv, get_environ(inf)) == -1)
 		{
 			free_info(inf, 1);
 			if (errno == EACCES)

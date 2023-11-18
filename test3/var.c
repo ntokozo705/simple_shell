@@ -95,15 +95,14 @@ int r_alias(info_t *info)
 int r_vars(info_t *info)
 {
 	int i = 0;
-	list_t *node;
-
+	/*list_t *node;*/
 	for (i = 0; info->argv[i]; i++)
 	{
 		if (info->argv[i][0] != '$' || !info->argv[i][1])
 			continue;
 		if (!strcmp(info->argv[i], "$?"))
 		{
-			replace_string(&(info->argv[i]), _strdup(_strchr(node->str, '=') + 1));
+			replace_string(&(info->argv[i]), _strdup(_strchr("", '=') + 1));
 			continue;
 		}
 		replace_string(&info->argv[i], strdup(""));

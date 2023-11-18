@@ -1,1 +1,1 @@
-simple shell readme file.
+ntokozo test dir
